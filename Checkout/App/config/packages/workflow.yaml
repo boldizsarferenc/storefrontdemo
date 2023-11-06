@@ -1,0 +1,23 @@
+framework:
+    workflows:
+        checkout_process:
+            marking_store:
+                service: App\Domain\Saga\CheckoutStatusMarkingStore
+            supports:
+                - App\Domain\Checkout
+            places:
+                - pending
+                - unpaid
+                - paid
+                - completed
+                - failed
+            transitions:
+                to_unpaid:
+                    from: pending
+                    to: unpaid
+                to_paid:
+                    from: unpaid
+                    to: paid
+                to_completed:
+                    from: paid
+                    to: completed

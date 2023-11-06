@@ -25,7 +25,7 @@ class CreateCheckoutHandler
         $cart = $this->cartApi->getCart($command->cartId);
         $checkout = new Checkout(
             $checkoutId,
-            CheckoutStatus::Pending,
+            CheckoutStatus::STATUS_PENDING,
             $cart
         );
         $this->checkoutRepository->createCheckout($checkout);
