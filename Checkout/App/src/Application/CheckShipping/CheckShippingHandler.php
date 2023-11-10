@@ -14,7 +14,7 @@ class CheckShippingHandler implements CheckoutSagaStepInterface
     public function __construct(
         private readonly WorkflowInterface $workflow,
         private readonly CheckoutRepositoryInterface $checkoutRepository,
-//        private readonly ShippingApiInterface $shippingApi,
+        private readonly ShippingApiInterface $shippingApi,
         private readonly SagaLoggerInterface $logger
     ) {
     }
@@ -22,8 +22,10 @@ class CheckShippingHandler implements CheckoutSagaStepInterface
     public function execute(Checkout $checkout): ?string
     {
         if ($this->workflow->can($checkout, 'check_shipping')) {
-//            $isPossibleShipping = $this->shippingApi->isPossibleShipping($checkout->getCheckoutId());
-
+            $isValid = $this->shippingApi->isValidAddress($checkout);
+            if(!$isValid) {
+                throw new \Exception('Shipping address is not valid!');
+            }
             $this->workflow->apply($checkout, 'check_shipping');
             $this->checkoutRepository->updateCheckout($checkout);
             $this->logger->debug('[CheckShippingHandler] execute finished');

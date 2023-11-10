@@ -18,6 +18,11 @@ create_shipping_method:
     controller: App\Presentation\Api\Controller\ShippingMethodsController::createShippingMethod
     methods: [POST]
 
+is_valid_address:
+    path: /is-valid-address
+    controller: App\Presentation\Api\Controller\ShippingMethodsController::isValidShippingAddress
+    methods: [POST]
+
 delete_shipping_method:
     path: /shipping-methods/{shippingMethodId}
     controller: App\Presentation\Api\Controller\ShippingMethodsController::deleteShippingMethod
