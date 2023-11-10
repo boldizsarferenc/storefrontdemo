@@ -2,7 +2,7 @@
 
 namespace App\Application\CheckStatus;
 
-use App\Domain\Api\PaymentApiInterface;
+use App\Domain\Catalog\CatalogAdapter;
 use App\Domain\Checkout;
 use App\Domain\CheckoutRepositoryInterface;
 use App\Domain\Saga\CheckoutSagaStepInterface;
@@ -14,7 +14,7 @@ class CheckStatusHandler implements CheckoutSagaStepInterface
     public function __construct(
         private readonly WorkflowInterface $workflow,
         private readonly CheckoutRepositoryInterface $checkoutRepository,
-//        private readonly CatalogApi $catalogApi,
+        private readonly CatalogAdapter $catalogAdapter,
         private readonly SagaLoggerInterface $logger
     ) {
     }
@@ -22,7 +22,12 @@ class CheckStatusHandler implements CheckoutSagaStepInterface
     public function execute(Checkout $checkout): ?string
     {
         if ($this->workflow->can($checkout, 'check_status')) {
-//            $paymentStatus = $this->catalogApi->isEnabledProduct($checkout->getCheckoutId());
+            foreach ($checkout->getCart()->getCartItems() as $checkoutItem) {
+                $product = $this->catalogAdapter->getBySku($checkoutItem->getSku());
+                if (!$product['enabled']) {
+                    throw new \Exception("Product is not enabled!");
+                }
+            }
 
             $this->workflow->apply($checkout, 'check_status');
             $this->checkoutRepository->updateCheckout($checkout);

@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
     stock: {
       type: Sequelize.INTEGER
     },
+    enabled: {
+      type: Sequelize.BOOLEAN
+    },
     attributes: {
       type: Sequelize.JSON
     },

@@ -60,6 +60,6 @@ class PaymentApi implements PaymentApiInterface
 
     public function getPaymentStatus(string $externalPaymentMethodId): PaymentStatus
     {
-        return new PaymentStatus('FAILED', '');
+        return new PaymentStatus('SUCCESS', '');
     }
 }

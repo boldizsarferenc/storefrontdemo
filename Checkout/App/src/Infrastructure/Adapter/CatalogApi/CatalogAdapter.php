@@ -24,4 +24,9 @@ class CatalogAdapter implements CatalogAdapterInterface
         $product = $this->client->getProductBySku($sku);
         $this->client->postStock('subtract_stock', $product['id'], $quantity);
     }
+
+    public function getBySku(string $sku): array
+    {
+        return $this->client->getProductBySku($sku);
+    }
 }
