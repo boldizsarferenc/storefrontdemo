@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
     vat: {
       type: Sequelize.FLOAT
     },
+    stock: {
+      type: Sequelize.INTEGER
+    },
     attributes: {
       type: Sequelize.JSON
     },

@@ -3214,6 +3214,7 @@ USE `catalog`;
 CREATE TABLE `products` (
   `id` int NOT NULL,
   `sku` varchar(255) DEFAULT NULL,
+  `stock` varchar(255) DEFAULT 0,
   `name` varchar(255) DEFAULT NULL,
   `description` mediumtext,
   `netPrice` float DEFAULT NULL,
@@ -3227,8 +3228,8 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `sku`, `name`, `description`, `netPrice`, `vat`, `attributes`, `createdAt`, `updatedAt`) VALUES
-(1, 'asdf', 'teszt termék', 'teszt termék leírás', 500, 27, NULL, '2023-02-22 10:03:20', '2023-02-22 10:03:20');
+INSERT INTO `products` (`id`, `sku`, `stock`, `name`, `description`, `netPrice`, `vat`, `attributes`, `createdAt`, `updatedAt`) VALUES
+(1, 'asdf', 10, 'teszt termék', 'teszt termék leírás', 500, 27, NULL, '2023-02-22 10:03:20', '2023-02-22 10:03:20');
 
 --
 -- Indexes for dumped tables

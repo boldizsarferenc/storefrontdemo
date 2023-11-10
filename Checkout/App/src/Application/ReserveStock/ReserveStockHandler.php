@@ -2,6 +2,7 @@
 
 namespace App\Application\ReserveStock;
 
+use App\Domain\Catalog\CatalogAdapter;
 use App\Domain\Checkout;
 use App\Domain\CheckoutRepositoryInterface;
 use App\Domain\Saga\CheckoutSagaStepInterface;
@@ -13,6 +14,7 @@ class ReserveStockHandler implements CheckoutSagaStepInterface
     public function __construct(
         private readonly WorkflowInterface $workflow,
         private readonly CheckoutRepositoryInterface $checkoutRepository,
+        private readonly CatalogAdapter $catalogAdapter,
         private readonly SagaLoggerInterface $logger
     ) {
     }
@@ -21,7 +23,9 @@ class ReserveStockHandler implements CheckoutSagaStepInterface
     {
         if ($this->workflow->can($checkout, 'reserve_stock')) {
 
-            // TODO: $this->stockService->prepareOrder($checkout->getCheckoutId());
+            foreach ($checkout->getCart()->getCartItems() as $checkoutItem) {
+                $this->catalogAdapter->subtractStock($checkoutItem->getSku(), $checkoutItem->getQuantity());
+            }
             // throw new \Exception('The ordered product is out of stock!');
             $this->workflow->apply($checkout, 'reserve_stock');
             $this->checkoutRepository->updateCheckout($checkout);
@@ -33,7 +37,9 @@ class ReserveStockHandler implements CheckoutSagaStepInterface
 
     public function compensate(Checkout $checkout): void
     {
-        // TODO: $this->stockService->restoreOrder($checkout->getCheckoutId());
+        foreach ($checkout->getCart()->getCartItems() as $checkoutItem) {
+            $this->catalogAdapter->addStock($checkoutItem->getSku(), $checkoutItem->getQuantity());
+        }
         $this->logger->debug('[ReserveStockHandler] compensate finished');
     }
 }
