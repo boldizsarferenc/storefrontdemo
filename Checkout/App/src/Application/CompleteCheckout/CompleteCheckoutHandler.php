@@ -21,9 +21,9 @@ class CompleteCheckoutHandler implements CheckoutSagaStepInterface
 
     public function execute(Checkout $checkout): ?string
     {
-        if ($this->workflow->can($checkout, 'complete_checkout')) {
+        if ($this->workflow->can($checkout, $this->getTransactionName())) {
             $this->orderApi->createOrder($checkout->getCheckoutId());
-            $this->workflow->apply($checkout, 'complete_checkout');
+            $this->workflow->apply($checkout, $this->getTransactionName());
             $this->checkoutRepository->updateCheckout($checkout);
             $this->logger->debug('[CompleteCheckoutHandler] execute finished');
         }
@@ -34,5 +34,10 @@ class CompleteCheckoutHandler implements CheckoutSagaStepInterface
     {
         // TODO: $this->orderApi->removeOrder($checkout->getCheckoutId());
         $this->logger->debug('[CompleteCheckoutHandler] compensate finished');
+    }
+
+    public function getTransactionName(): string
+    {
+        return 'complete_checkout';
     }
 }

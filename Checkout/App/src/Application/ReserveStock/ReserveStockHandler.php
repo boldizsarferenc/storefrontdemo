@@ -21,13 +21,13 @@ class ReserveStockHandler implements CheckoutSagaStepInterface
 
     public function execute(Checkout $checkout): ?string
     {
-        if ($this->workflow->can($checkout, 'reserve_stock')) {
+        if ($this->workflow->can($checkout, $this->getTransactionName())) {
 
             foreach ($checkout->getCart()->getCartItems() as $checkoutItem) {
                 $this->catalogAdapter->subtractStock($checkoutItem->getSku(), $checkoutItem->getQuantity());
             }
             // throw new \Exception('The ordered product is out of stock!');
-            $this->workflow->apply($checkout, 'reserve_stock');
+            $this->workflow->apply($checkout, $this->getTransactionName());
             $this->checkoutRepository->updateCheckout($checkout);
 
             $this->logger->debug('[ReserveStockHandler] execute finished');
@@ -41,5 +41,10 @@ class ReserveStockHandler implements CheckoutSagaStepInterface
             $this->catalogAdapter->addStock($checkoutItem->getSku(), $checkoutItem->getQuantity());
         }
         $this->logger->debug('[ReserveStockHandler] compensate finished');
+    }
+
+    public function getTransactionName(): string
+    {
+        return 'reserve_stock';
     }
 }

@@ -10,6 +10,7 @@ use App\Application\ReserveStock\ReserveStockHandler;
 use App\Application\StartPayment\StartPaymentHandler;
 use App\Domain\Checkout;
 use App\Domain\Saga\CheckoutSagaStepInterface;
+use App\Domain\Saga\WorkflowInterface;
 
 class CheckoutSagaOrchestrator
 {
@@ -19,6 +20,7 @@ class CheckoutSagaOrchestrator
     private array $steps;
 
     public function __construct(
+        private readonly WorkflowInterface $workflow,
         ReserveStockHandler $reserveStock,
         StartPaymentHandler $startPayment,
         CompletePaymentHandler $completePayment,
@@ -42,7 +44,15 @@ class CheckoutSagaOrchestrator
 
     public function compensate(Checkout $checkout): void
     {
+        $currentStepFound = false;
         foreach (array_reverse($this->steps) as $step) {
+            if (!$currentStepFound && !$this->workflow->can($checkout, $step->getTransactionName())) {
+                continue;
+            }
+            if (!$currentStepFound) {
+                $currentStepFound = true;
+                continue;
+            }
             $step->compensate($checkout);
         }
     }

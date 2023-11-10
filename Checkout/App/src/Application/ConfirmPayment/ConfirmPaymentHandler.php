@@ -35,7 +35,7 @@ class ConfirmPaymentHandler
             $this->orchestrator->execute($checkout);
         } catch (Exception $exception) {
             $errorMessage = sprintf('An error occurred while processing the order. Reason: %s', $exception->getMessage());
-            $this->sagaLogger->debug(sprintf('[ConfirmPaymentCommand] %s', $errorMessage));
+            $this->sagaLogger->debug(sprintf('[ConfirmPaymentHandler] %s', $errorMessage));
             $this->orchestrator->compensate($checkout);
             $checkout->setCheckoutStatus(CheckoutStatus::STATUS_FAILED);
             $this->checkoutRepository->updateCheckout($checkout);

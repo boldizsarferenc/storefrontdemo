@@ -3,13 +3,6 @@
 namespace App\Domain;
 
 use App\Domain\Shared\EntityId;
-use App\Domain\CheckoutStatus;
-use App\Domain\Customer;
-use App\Domain\ShippingAddress;
-use App\Domain\BillingAddress;
-use App\Domain\ShippingMethod;
-use App\Domain\PaymentMethod;
-use App\Domain\Cart;
 
 class Checkout
 {

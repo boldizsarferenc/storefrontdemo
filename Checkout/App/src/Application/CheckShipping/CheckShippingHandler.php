@@ -21,12 +21,12 @@ class CheckShippingHandler implements CheckoutSagaStepInterface
 
     public function execute(Checkout $checkout): ?string
     {
-        if ($this->workflow->can($checkout, 'check_shipping')) {
+        if ($this->workflow->can($checkout, $this->getTransactionName())) {
             $isValid = $this->shippingApi->isValidAddress($checkout);
             if(!$isValid) {
                 throw new \Exception('Shipping address is not valid!');
             }
-            $this->workflow->apply($checkout, 'check_shipping');
+            $this->workflow->apply($checkout, $this->getTransactionName());
             $this->checkoutRepository->updateCheckout($checkout);
             $this->logger->debug('[CheckShippingHandler] execute finished');
         }
@@ -36,5 +36,10 @@ class CheckShippingHandler implements CheckoutSagaStepInterface
     public function compensate(Checkout $checkout): void
     {
         $this->logger->debug('[CheckShippingHandler] compensate finished');
+    }
+
+    public function getTransactionName(): string
+    {
+        return 'check_shipping';
     }
 }

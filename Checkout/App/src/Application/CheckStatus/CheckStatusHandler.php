@@ -21,7 +21,7 @@ class CheckStatusHandler implements CheckoutSagaStepInterface
 
     public function execute(Checkout $checkout): ?string
     {
-        if ($this->workflow->can($checkout, 'check_status')) {
+        if ($this->workflow->can($checkout, $this->getTransactionName())) {
             foreach ($checkout->getCart()->getCartItems() as $checkoutItem) {
                 $product = $this->catalogAdapter->getBySku($checkoutItem->getSku());
                 if (!$product['enabled']) {
@@ -29,7 +29,7 @@ class CheckStatusHandler implements CheckoutSagaStepInterface
                 }
             }
 
-            $this->workflow->apply($checkout, 'check_status');
+            $this->workflow->apply($checkout, $this->getTransactionName());
             $this->checkoutRepository->updateCheckout($checkout);
             $this->logger->debug('[CheckStatusHandler] execute finished');
         }
@@ -39,5 +39,10 @@ class CheckStatusHandler implements CheckoutSagaStepInterface
     public function compensate(Checkout $checkout): void
     {
         $this->logger->debug('[CheckStatusHandler] compensate finished');
+    }
+
+    public function getTransactionName(): string
+    {
+        return 'check_status';
     }
 }

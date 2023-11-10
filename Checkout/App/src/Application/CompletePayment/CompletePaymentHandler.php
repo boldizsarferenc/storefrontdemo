@@ -21,7 +21,7 @@ class CompletePaymentHandler implements CheckoutSagaStepInterface
 
     public function execute(Checkout $checkout): ?string
     {
-        if ($this->workflow->can($checkout, 'complete_payment')) {
+        if ($this->workflow->can($checkout, $this->getTransactionName())) {
             $paymentStatus = $this->paymentApi->getPaymentStatus($checkout->getCheckoutId());
 
             if (strtoupper($paymentStatus->getPaymentStatus()) !== 'SUCCESS') {
@@ -32,7 +32,7 @@ class CompletePaymentHandler implements CheckoutSagaStepInterface
                 throw new \Exception($errorMessage);
             }
 
-            $this->workflow->apply($checkout, 'complete_payment');
+            $this->workflow->apply($checkout, $this->getTransactionName());
             $this->checkoutRepository->updateCheckout($checkout);
             $this->logger->debug('[CompletePaymentHandler] execute finished');
         }
@@ -49,5 +49,10 @@ class CompletePaymentHandler implements CheckoutSagaStepInterface
         }
 
         $this->logger->debug('[CompletePaymentHandler] compensate failed');
+    }
+
+    public function getTransactionName(): string
+    {
+        return 'complete_payment';
     }
 }
