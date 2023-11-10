@@ -109,3 +109,9 @@ services:
         tags:
             -   name: messenger.message_handler
                 handles: App\WebshopBundle\Application\Checkout\GetCheckout\GetCheckoutQuery
+
+    App\WebshopBundle\Application\Checkout\ConfirmPayment\ConfirmPaymentHandler:
+        tags:
+            -   name: messenger.message_handler
+                bus: command.bus
+                handles: App\WebshopBundle\Application\Checkout\ConfirmPayment\ConfirmPaymentCommand

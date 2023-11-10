@@ -5,8 +5,11 @@ namespace App\Domain;
 enum CheckoutStatus: string
 {
     case STATUS_PENDING = 'pending';
-    case STATUS_UNPAID = 'unpaid';
+    case STATUS_STOCK_RESERVED = 'stock_reserved';
+    case STATUS_PAYMENT_IN_PROGRESS = 'payment_in_progress';
     case STATUS_PAID = 'paid';
+    case STATUS_STATUS_CHECKED = 'status_checked';
+    case STATUS_SHIPPING_CHECKED = 'shipping_checked';
     case STATUS_COMPLETED = 'completed';
     case STATUS_FAILED = 'failed';
 

@@ -2,22 +2,34 @@ framework:
     workflows:
         checkout_process:
             marking_store:
-                service: App\Domain\Saga\CheckoutStatusMarkingStore
+                service: App\Infrastructure\Saga\CheckoutStatusMarkingStore
             supports:
                 - App\Domain\Checkout
             places:
                 - pending
-                - unpaid
+                - stock_reserved
+                - payment_in_progress
                 - paid
+                - status_checked
+                - shipping_checked
                 - completed
                 - failed
             transitions:
-                to_unpaid:
+                reserve_stock:
                     from: pending
-                    to: unpaid
-                to_paid:
-                    from: unpaid
+                    to: stock_reserved
+                start_payment:
+                    from: stock_reserved
+                    to: payment_in_progress
+                complete_payment:
+                    from: payment_in_progress
                     to: paid
-                to_completed:
+                check_status:
                     from: paid
+                    to: status_checked
+                check_shipping:
+                    from: status_checked
+                    to: shipping_checked
+                complete_checkout:
+                    from: shipping_checked
                     to: completed

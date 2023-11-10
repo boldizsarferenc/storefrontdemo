@@ -42,3 +42,8 @@ confirm:
     path: /api/checkout/{checkoutId}/confirm
     controller: App\Presentation\Api\Controller\CheckoutController::confirm
     methods:    [POST]
+
+complete_payment:
+    path: /api/checkout/{checkoutId}/complete-payment
+    controller: App\Presentation\Api\Controller\CheckoutController::completePayment
+    methods:    [POST]

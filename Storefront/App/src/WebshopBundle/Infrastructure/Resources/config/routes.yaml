@@ -80,8 +80,13 @@ addPaymentMethod:
     methods: POST
 
 confirm:
-    path: checkout/{checkoutId}/confirm
+    path: /checkout/{checkoutId}/confirm
     controller: App\WebshopBundle\Presentation\Web\Controller\CheckoutController::confirm
+    methods: GET
+
+completePayment:
+    path: /checkout/{checkoutId}/complete-payment
+    controller: App\WebshopBundle\Presentation\Web\Controller\CheckoutController::completePayment
     methods: GET
 
 shipping:

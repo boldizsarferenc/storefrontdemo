@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Saga;
+namespace App\Infrastructure\Saga;
 
 use App\Domain\Checkout;
 use App\Domain\CheckoutStatus;

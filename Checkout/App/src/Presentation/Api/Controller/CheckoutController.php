@@ -3,15 +3,17 @@
 namespace App\Presentation\Api\Controller;
 
 use App\Application\ConfirmCheckout\ConfirmCheckoutCommand;
+use App\Application\ConfirmPayment\ConfirmPaymentCommand;
 use App\Application\CreateCheckout\CreateCheckoutCommand;
 use App\Application\GetCheckout\GetCheckoutQuery;
-use App\Application\SaveCustomer\SaveCustomerCommand;
-use App\Application\SaveShippingAddress\SaveShippingAddressCommand;
 use App\Application\SaveBillingAddress\SaveBillingAddressCommand;
-use App\Application\SaveShippingMethod\SaveShippingMethodCommand;
+use App\Application\SaveCustomer\SaveCustomerCommand;
 use App\Application\SavePaymentMethod\SavePaymentMethodCommand;
-use Symfony\Component\HttpFoundation\Request;
+use App\Application\SaveShippingAddress\SaveShippingAddressCommand;
+use App\Application\SaveShippingMethod\SaveShippingMethodCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -144,6 +146,15 @@ class CheckoutController extends AbstractController
     {
         $post = json_decode($request->getContent());
         $command = new ConfirmCheckoutCommand($checkoutId);
+        $redirectUrl = $this->handle($command);
+
+        return new JsonResponse(['redirectUrl' => $redirectUrl]);
+    }
+
+    public function completePayment(string $checkoutId, Request $request)
+    {
+        $post = json_decode($request->getContent());
+        $command = new ConfirmPaymentCommand($checkoutId);
         $response = $this->handle($command);
 
         return new Response($this->serializer->serialize($response,'json'));

@@ -54,6 +54,11 @@ class PaymentApi implements PaymentApiInterface
         ]);
         $data = json_decode($response->getContent(), true);
 
-        return new PaymentStatus($data['status'] ?? 'error', $data['redirect_url']);
+        return new PaymentStatus($data['redirect_url'] ?? null);
+    }
+
+    public function getPaymentStatus(string $externalPaymentMethodId): PaymentStatus
+    {
+        return new PaymentStatus('SUCCESS'); // TODO: Rosti ezért mérges lesz :(
     }
 }

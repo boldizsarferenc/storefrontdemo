@@ -18,7 +18,11 @@ interface CheckoutRepositoryInterface
     /**
      * @throws DomainException
      */
-    public function confirmCheckout(string $checkoutId): Checkout;
+    public function confirmCheckout(string $checkoutId): array;
+    /**
+     * @throws DomainException
+     */
+    public function confirmPayment(string $checkoutId): Checkout;
     /**
      * @throws DomainException
      */

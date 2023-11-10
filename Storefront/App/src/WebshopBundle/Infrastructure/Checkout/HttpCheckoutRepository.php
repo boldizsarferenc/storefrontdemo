@@ -215,11 +215,22 @@ class HttpCheckoutRepository implements CheckoutRepositoryInterface
     /**
      * @throws DomainException
      */
-    public function confirmCheckout(string $checkoutId): Checkout
+    public function confirmCheckout(string $checkoutId): array
     {
         $this->resourceUri = 'checkout/' . $checkoutId . '/confirm';
         $response = $this->sendPostRequest([]);
-        return $this->buildCheckoutDtoFromResponse($response);
+        return $response;
+    }
+
+    /**
+     * @throws DomainException
+     */
+    public function confirmPayment(string $checkoutId): Checkout
+    {
+        $this->resourceUri = 'checkout/' . $checkoutId . '/complete-payment';
+        $response = $this->sendPostRequest([]);
+
+        return $this->buildCheckoutDtoFromResponse($response) ;
     }
 
     /**

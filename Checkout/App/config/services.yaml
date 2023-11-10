@@ -89,3 +89,9 @@ services:
             -   name: messenger.message_handler
                 bus: command.bus
                 handles: App\Application\ConfirmCheckout\ConfirmCheckoutCommand
+
+    App\Application\ConfirmPayment\ConfirmPaymentHandler:
+        tags:
+            -   name: messenger.message_handler
+                bus: command.bus
+                handles: App\Application\ConfirmPayment\ConfirmPaymentCommand
