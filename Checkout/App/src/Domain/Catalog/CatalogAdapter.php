@@ -6,7 +6,7 @@ interface CatalogAdapter
 {
     public function addStock(string $sku, int $quantity): void;
 
-    public function subtractStock(string $sku, int $quantity): void;
+    public function subtractStock(string $sku, int $quantity): bool;
 
     public function getBySku(string $sku): array;
 }

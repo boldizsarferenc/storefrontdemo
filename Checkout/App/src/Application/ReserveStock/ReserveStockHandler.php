@@ -24,9 +24,11 @@ class ReserveStockHandler implements CheckoutSagaStepInterface
         if ($this->workflow->can($checkout, $this->getTransactionName())) {
 
             foreach ($checkout->getCart()->getCartItems() as $checkoutItem) {
-                $this->catalogAdapter->subtractStock($checkoutItem->getSku(), $checkoutItem->getQuantity());
+                $response = $this->catalogAdapter->subtractStock($checkoutItem->getSku(), $checkoutItem->getQuantity());
+                if(!$response) {
+                     throw new \Exception('The ordered product is out of stock!');
+                }
             }
-            // throw new \Exception('The ordered product is out of stock!');
             $this->workflow->apply($checkout, $this->getTransactionName());
             $this->checkoutRepository->updateCheckout($checkout);
 

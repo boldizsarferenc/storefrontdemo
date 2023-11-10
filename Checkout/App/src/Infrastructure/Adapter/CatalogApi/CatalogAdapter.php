@@ -19,10 +19,12 @@ class CatalogAdapter implements CatalogAdapterInterface
         $this->client->postStock('add_stock', $product['id'], $quantity);
     }
 
-    public function subtractStock(string $sku, int $quantity): void
+    public function subtractStock(string $sku, int $quantity): bool
     {
         $product = $this->client->getProductBySku($sku);
-        $this->client->postStock('subtract_stock', $product['id'], $quantity);
+        $response = $this->client->postStock('subtract_stock', $product['id'], $quantity);
+
+        return $response === 200;
     }
 
     public function getBySku(string $sku): array
