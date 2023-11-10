@@ -24,4 +24,13 @@ class PaymentRepository extends ServiceEntityRepository implements PaymentReposi
         $this->getEntityManager()->persist($payment);
         $this->getEntityManager()->flush();
     }
+
+    public function save(): void {
+        $this->getEntityManager()->flush();
+    }
+
+    public function getByCheckoutId(string $checkoutId): Payment
+    {
+        return $this->findOneBy(['checkoutId' => $checkoutId]);
+    }
 }

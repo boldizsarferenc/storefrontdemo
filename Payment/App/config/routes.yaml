@@ -13,6 +13,11 @@ payment:
     controller: App\Presentation\Api\Controller\InitiatePaymentController::index
     methods: [POST]
 
+payment_redirect:
+    path: /api/payment/redirect
+    controller: App\Presentation\Api\Controller\InitiatePaymentController::paymentRedirect
+    methods: [GET]
+
 payment_method:
     path: /api/paymentMethod/{paymentMethodId}
     controller: \App\Presentation\Api\Controller\PaymentMethodController::index
@@ -31,3 +36,7 @@ refund_payment:
     path: /api/refundPayment
     controller: \App\Presentation\Api\Controller\FakePaymentController::refund
 
+get_payment:
+    path: /api/getPayment/{checkoutId}
+    controller: \App\Presentation\Api\Controller\PaymentController::index
+    methods: [ GET ]

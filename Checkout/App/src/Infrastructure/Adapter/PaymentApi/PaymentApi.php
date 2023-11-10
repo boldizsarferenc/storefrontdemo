@@ -58,9 +58,11 @@ class PaymentApi implements PaymentApiInterface
         return new PaymentStatus($data['status'] ?? 'error', $data['redirectUrl'] ?? null);
     }
 
-    public function getPaymentStatus(string $externalPaymentMethodId): PaymentStatus
+    public function getPaymentStatus(string $checkoutId): PaymentStatus
     {
-        return new PaymentStatus('SUCCESS', '');
+        $response = $this->client->request('GET', "/payment/api/getPayment/$checkoutId");
+        $data = json_decode($response->getContent(), true);
+        return new PaymentStatus($data['status'], '');
     }
 
     public function refund(string $checkoutId): bool

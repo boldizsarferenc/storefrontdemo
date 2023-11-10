@@ -40,11 +40,14 @@ class CreatePaymentHandler
             new PaymentMethodId($command->getPaymentMethodId())
         );
 
+        $payment->setCheckoutId($command->getCheckoutId());
+
         $payment->setAmount($command->getAmount());
         $payment->setCustomer($command->getCustomer());
-        $payment->setStatus($command->getInitialState());
+        $payment->setStatus($paymentMethod->getName() === 'fakePayment' ? 'PENDING' : 'SUCCESS');
+//        "http://localhost/checkout/".$command->getCheckoutId()."/complete-payment"
         $payment->setRedirectUrl(
-            $this->redirectUrlFactory->createRedirectUrl($command->getAmount(), "http://localhost/checkout/".$command->getCheckoutId()."/complete-payment", $paymentMethod->getName())
+            $this->redirectUrlFactory->createRedirectUrl($command->getAmount(), $command->getPaymentId(), $paymentMethod->getName())
         );
 
         $this->paymentRepository->add($payment);

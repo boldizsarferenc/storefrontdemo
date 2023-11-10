@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Application\GetPaymentQuery;
+namespace App\Application\GetPaymentByCheckout;
 
 use App\Application\DTO\PaymentDTO;
-use App\Application\Service\PaymentRedirectUrlFactory;
-use App\Domain\PaymentId;
 use App\Domain\PaymentRepositoryInterface;
 
-class GetPaymentHandler
+class GetPaymentByCheckoutIdHandler
 {
     private PaymentRepositoryInterface $paymentRepository;
 
@@ -17,10 +15,10 @@ class GetPaymentHandler
         $this->paymentRepository = $paymentRepository;
     }
 
-    public function execute(GetPaymentQuery $query): PaymentDTO
+    public function execute(GetPaymentByCheckoutIdQuery $query): PaymentDTO
     {
-        $payment = $this->paymentRepository->get(
-            new PaymentId($query->getCheckoutId())
+        $payment = $this->paymentRepository->getByCheckoutId(
+           $query->getCheckoutId()
         );
 
         $dto = new PaymentDTO();
@@ -34,5 +32,4 @@ class GetPaymentHandler
 
         return $dto;
     }
-
 }

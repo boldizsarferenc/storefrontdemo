@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Application\GetPaymentQuery;
+namespace App\Application\GetPaymentByCheckout;
 
-class GetPaymentQuery
+class GetPaymentByCheckoutIdQuery
 {
     private string $checkoutId;
 

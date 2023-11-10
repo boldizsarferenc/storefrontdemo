@@ -8,6 +8,8 @@ class Payment
 
     private PaymentMethodId $paymentMethodId;
 
+    private string $checkoutId;
+
     private array $customer;
 
     private float $amount;
@@ -107,5 +109,15 @@ class Payment
     public function setRedirectUrl(?string $redirectUrl): void
     {
         $this->redirectUrl = $redirectUrl;
+    }
+
+    public function setCheckoutId(string $checkoutId): void
+    {
+        $this->checkoutId = $checkoutId;
+    }
+
+    public function getCheckoutId(): string
+    {
+        return $this->checkoutId;
     }
 }
