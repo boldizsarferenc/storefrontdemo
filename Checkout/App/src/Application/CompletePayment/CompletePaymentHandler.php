@@ -29,7 +29,7 @@ class CompletePaymentHandler implements CheckoutSagaStepInterface
                     'Current payment status is not SUCCESS. Current status is: %s',
                     strtoupper($paymentStatus->getPaymentStatus())
                 );
-                throw new \Exception($errorMessage); //TODO: rendberakni
+                throw new \Exception($errorMessage);
             }
 
             $this->workflow->apply($checkout, 'complete_payment');
@@ -41,7 +41,13 @@ class CompletePaymentHandler implements CheckoutSagaStepInterface
 
     public function compensate(Checkout $checkout): void
     {
-        // TODO: $this->paymentApi->refundPayment($checkout->getCheckoutId())
-        $this->logger->debug('[CompletePaymentHandler] compensate finished');
+        $response = $this->paymentApi->refund($checkout->getCheckoutId());
+        if($response) {
+            $this->logger->debug('[CompletePaymentHandler] compensate finished');
+
+            return;
+        }
+
+        $this->logger->debug('[CompletePaymentHandler] compensate failed');
     }
 }

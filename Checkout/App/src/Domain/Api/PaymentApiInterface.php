@@ -11,4 +11,5 @@ interface PaymentApiInterface
     public function getPaymentMethod(string $externalPaymentMethodId): PaymentMethod;
     public function createPaymentMethod(string $checkoutId, string $externalPaymentMethodId, Customer $customer, float $cartTotal): PaymentStatus;
     public function getPaymentStatus(string $externalPaymentMethodId): PaymentStatus;
+    public function refund(string $checkoutId): bool;
 }

@@ -62,4 +62,18 @@ class PaymentApi implements PaymentApiInterface
     {
         return new PaymentStatus('SUCCESS', '');
     }
+
+    public function refund(string $checkoutId): bool
+    {
+        $response = $this->client->request('POST', '/payment/api/refundPayment', [
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'checkoutId' => $checkoutId,
+            ]
+        ]);
+
+        return $response->getContent() === 'A refund sikeres';
+    }
 }
