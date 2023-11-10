@@ -27,3 +27,7 @@ submit_payment:
     path: /api/submitPayment/
     controller: \App\Presentation\Api\Controller\FakePaymentController::submit
 
+refund_payment:
+    path: /api/refundPayment
+    controller: \App\Presentation\Api\Controller\FakePaymentController::refund
+

@@ -2,6 +2,7 @@
 
 namespace App\Presentation\Api\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,5 +34,12 @@ class FakePaymentController extends AbstractController
         $redirectUrl .= "?status=$status";
 
         return $this->redirect($redirectUrl);
+    }
+
+    public function refund(LoggerInterface $logger): Response
+    {
+        $logger->info('A refund sikeres');
+
+        return new Response('A refund sikeres');
     }
 }
