@@ -22,8 +22,9 @@ class StartPaymentHandler implements CheckoutSagaStepInterface
     public function execute(Checkout $checkout): ?string
     {
         if ($this->workflow->can($checkout, 'start_payment')) {
-            $redirectUrl = $this->paymentApi->createPaymentMethod(
+            $paymentStatus = $this->paymentApi->createPaymentMethod(
                 $checkout->getCheckoutId(),
+                $checkout->getPaymentMethod()->getExternalPaymentMethodId(),
                 $checkout->getCustomer(),
                 $checkout->getCart()->getCartTotal()
             );
@@ -35,8 +36,7 @@ class StartPaymentHandler implements CheckoutSagaStepInterface
 
             $this->logger->debug('[StartPaymentHandler] execute finished');
 
-//            return 'http://localhost/checkout/'.$checkout->getCheckoutId().'/complete-payment';
-            return $redirectUrl;
+            return $paymentStatus->getGatewayUrl();
         }
         return null;
     }

@@ -22,7 +22,7 @@ class Checkout
         private ?BillingAddress $billingAddress = null,
         private ?ShippingMethod $shippingMethod = null,
         private ?PaymentMethod $paymentMethod = null,
-        private ?string $gatewayUrl
+        private ?string $gatewayUrl = null
     ) {
     }
 
@@ -152,7 +152,7 @@ class Checkout
         $this->paymentMethod = $paymentMethod;
     }
 
-    public function setGatewayUrl(string $getGatewayUrl)
+    public function setGatewayUrl(?string $getGatewayUrl)
     {
         $this->gatewayUrl = $getGatewayUrl;
     }

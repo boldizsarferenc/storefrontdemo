@@ -44,7 +44,7 @@ class CreatePaymentHandler
         $payment->setCustomer($command->getCustomer());
         $payment->setStatus($command->getInitialState());
         $payment->setRedirectUrl(
-            $this->redirectUrlFactory->createRedirectUrl($command->getAmount(), "https://google.com", $paymentMethod->getName())
+            $this->redirectUrlFactory->createRedirectUrl($command->getAmount(), "http://localhost/checkout/".$command->getCheckoutId()."/complete-payment", $paymentMethod->getName())
         );
 
         $this->paymentRepository->add($payment);

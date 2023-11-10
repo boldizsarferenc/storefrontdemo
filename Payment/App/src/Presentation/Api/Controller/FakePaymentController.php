@@ -14,7 +14,7 @@ class FakePaymentController extends AbstractController
     public function index(Request $request): Response
     {
         $total = $request->get('total');
-        $redirectUrl = $request->get('redirect_url');
+        $redirectUrl = $request->get('redirectUrl');
         return $this->render('fakepayment.html.twig', [
             'total' => $total,
             'redirect_url' => $redirectUrl
@@ -24,7 +24,7 @@ class FakePaymentController extends AbstractController
     public function submit(Request $request): Response
     {
         $creditNumber = $request->get('credit-number');
-        $redirectUrl = $request->get('redirect_url');
+        $redirectUrl = $request->get('redirectUrl');
         $status = 0;
 
         if ($creditNumber === self::SUCCESS_CARD) {

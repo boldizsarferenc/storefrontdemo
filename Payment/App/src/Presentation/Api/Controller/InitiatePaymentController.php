@@ -30,6 +30,7 @@ class InitiatePaymentController extends AbstractController
         $createPaymentHandler->execute(
             new CreatePaymentCommand(
                 $paymentId,
+                $payload['checkoutId'],
                 $payload['paymentMethodId'],
                 $payload['customer'],
                 (float)$payload['amount'],

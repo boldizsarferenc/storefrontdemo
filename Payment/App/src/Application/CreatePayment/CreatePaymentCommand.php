@@ -6,6 +6,8 @@ class CreatePaymentCommand
 {
     private string $paymentId;
 
+    private string $checkoutId;
+
     private string $paymentMethodId;
 
     private array $customer;
@@ -16,12 +18,14 @@ class CreatePaymentCommand
 
     public function __construct(
         string $paymentId,
+        string $checkoutId,
         string $paymentMethodId,
         array $customer,
         float $amount,
         ?string $initialState = null
     ) {
         $this->paymentId = $paymentId;
+        $this->checkoutId = $checkoutId;
         $this->paymentMethodId = $paymentMethodId;
         $this->customer = $customer;
         $this->amount = $amount;
@@ -34,6 +38,11 @@ class CreatePaymentCommand
     public function getPaymentMethodId(): string
     {
         return $this->paymentMethodId;
+    }
+
+    public function getCheckoutId(): string
+    {
+        return $this->checkoutId;
     }
 
     /**

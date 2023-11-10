@@ -7,7 +7,7 @@ class PaymentStatus
 {
     public function __construct(
         private string $paymentStatus,
-        private string $gatewayUrl
+        private ?string $gatewayUrl
     ) {
     }
 
@@ -16,7 +16,7 @@ class PaymentStatus
         return $this->paymentStatus;
     }
 
-    public function getGatewayUrl(): string
+    public function getGatewayUrl(): ?string
     {
         return $this->gatewayUrl;
     }

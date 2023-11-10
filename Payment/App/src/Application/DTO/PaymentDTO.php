@@ -11,8 +11,8 @@ class PaymentDTO
     public array $customer;
 
     public float $amount;
-    
+
     public string $status;
 
-    public string $redirectUrl;
+    public ?string $redirectUrl;
 }
