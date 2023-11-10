@@ -154,13 +154,7 @@ class CheckoutController extends AbstractController
                 return $this->redirect($response['redirectUrl']);
             }
         } catch (HandlerFailedException $e) {
-            return new JsonResponse(
-                [
-                    'status' => 'error',
-                    'message' => $e->getMessage()
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
+            return $this->render('@webshop/failed.html.twig');
         }
 
         return $this->redirect('/thankyou');
@@ -174,13 +168,7 @@ class CheckoutController extends AbstractController
             ));
 
         } catch (HandlerFailedException $e) {
-            return new JsonResponse(
-                [
-                    'status' => 'error',
-                    'message' => $e->getMessage()
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
+            return $this->render('@webshop/failed.html.twig');
         }
 
         return $this->redirect('/thankyou');
