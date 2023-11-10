@@ -17,7 +17,7 @@ class Payment
      */
     private string $status;
 
-    private string $redirectUrl;
+    private ?string $redirectUrl;
 
     /**
      * @return PaymentId
@@ -99,18 +99,12 @@ class Payment
         $this->status = $status;
     }
 
-    /**
-     * @return string
-     */
-    public function getRedirectUrl(): string
+    public function getRedirectUrl(): ?string
     {
         return $this->redirectUrl;
     }
 
-    /**
-     * @param string $redirectUrl
-     */
-    public function setRedirectUrl(string $redirectUrl): void
+    public function setRedirectUrl(?string $redirectUrl): void
     {
         $this->redirectUrl = $redirectUrl;
     }

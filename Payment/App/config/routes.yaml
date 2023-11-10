@@ -17,3 +17,13 @@ payment_method:
     path: /api/paymentMethod/{paymentMethodId}
     controller: \App\Presentation\Api\Controller\PaymentMethodController::index
     methods: [GET]
+
+fake_payment:
+    path: /api/fakePayment/
+    controller: \App\Presentation\Api\Controller\FakePaymentController::index
+    methods: [ GET ]
+
+submit_payment:
+    path: /api/submitPayment/
+    controller: \App\Presentation\Api\Controller\FakePaymentController::submit
+

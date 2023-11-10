@@ -34,6 +34,8 @@ class CheckoutPaymentStep
                 $checkout->getCart()->getCartTotal()
             );
 
+            $checkout->setGatewayUrl($paymentStatus->getGatewayUrl());
+
             if (strtoupper($paymentStatus->getPaymentStatus()) !== 'SUCCESS') {
                 $errorMessage = sprintf(
                     'Current payment status is not SUCCESS. Current status is: %s',

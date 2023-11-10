@@ -17,4 +17,4 @@ RUN apk add --no-cache \
 
 USER nobody
 
-#RUN composer install --optimize-autoloader --no-interaction --no-progress
+RUN composer install --optimize-autoloader --no-interaction --no-progress

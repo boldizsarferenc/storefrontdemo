@@ -54,6 +54,6 @@ class PaymentApi implements PaymentApiInterface
         ]);
         $data = json_decode($response->getContent(), true);
 
-        return new PaymentStatus($data['status'] ?? 'error');
+        return new PaymentStatus($data['status'] ?? 'error', $data['redirect_url']);
     }
 }

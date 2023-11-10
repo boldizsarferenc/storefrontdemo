@@ -21,7 +21,8 @@ class Checkout
         private ?ShippingAddress $shippingAddress = null,
         private ?BillingAddress $billingAddress = null,
         private ?ShippingMethod $shippingMethod = null,
-        private ?PaymentMethod $paymentMethod = null
+        private ?PaymentMethod $paymentMethod = null,
+        private ?string $gatewayUrl
     ) {
     }
 
@@ -149,5 +150,15 @@ class Checkout
     public function setPaymentMethod(?\App\Domain\PaymentMethod $paymentMethod): void
     {
         $this->paymentMethod = $paymentMethod;
+    }
+
+    public function setGatewayUrl(string $getGatewayUrl)
+    {
+        $this->gatewayUrl = $getGatewayUrl;
+    }
+
+    public function getGatewayUrl(): ?string
+    {
+        return $this->gatewayUrl;
     }
 }
