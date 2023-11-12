@@ -5,6 +5,7 @@ namespace App\WebshopBundle\Presentation\Web\Controller;
 use App\WebshopBundle\Application\Checkout\AddBillingAddress\AddBillingAddressCommand;
 use App\WebshopBundle\Application\Checkout\AddShippingAddress\AddShippingAddressCommand;
 use App\WebshopBundle\Application\Checkout\ConfirmCheckout\ConfirmCheckoutCommand;
+use App\WebshopBundle\Application\Checkout\ConfirmPayment\ConfirmPaymentCommand;
 use App\WebshopBundle\Application\Checkout\CreateCheckout\CreateCheckoutQuery;
 use App\WebshopBundle\Application\Checkout\CreateCheckout\Dto\CreateCheckoutOutput;
 use App\WebshopBundle\Application\Checkout\Customer\CreateCustomerCommand;
@@ -18,6 +19,7 @@ use App\WebshopBundle\Domain\Model\Checkout\Dto\Customer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -144,17 +146,29 @@ class CheckoutController extends AbstractController
         }
 
         try {
-            $this->handle(new ConfirmCheckoutCommand(
+            $response = $this->handle(new ConfirmCheckoutCommand(
                 $request->cookies->get('checkoutId')
             ));
+
+            if (!empty($response['redirectUrl'])) {
+                return $this->redirect($response['redirectUrl']);
+            }
         } catch (HandlerFailedException $e) {
-            return new JsonResponse(
-                [
-                    'status' => 'error',
-                    'message' => $e->getMessage()
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
+            return $this->render('@webshop/failed.html.twig');
+        }
+
+        return $this->redirect('/thankyou');
+    }
+
+    public function completePayment(Request $request, string $checkoutId)
+    {
+        try {
+            $this->handle(new ConfirmPaymentCommand(
+                $checkoutId
+            ));
+
+        } catch (HandlerFailedException $e) {
+            return $this->render('@webshop/failed.html.twig');
         }
 
         return $this->redirect('/thankyou');

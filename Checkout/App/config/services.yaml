@@ -29,6 +29,7 @@ services:
 #              bus: command.bus
 #              handles: App\Application\Example\ExampleQuery
 #
+    Symfony\Component\Workflow\WorkflowInterface: '@state_machine.checkout_process'
     App\Domain\CheckoutRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\Repository\CheckoutRepository'
     App\Domain\Api\CartApiInterface: '@App\Infrastructure\Adapter\CartApi\CartApi'
     App\Domain\Api\ShippingApiInterface: '@App\Infrastructure\Adapter\ShippingApi\ShippingApi'
@@ -88,3 +89,9 @@ services:
             -   name: messenger.message_handler
                 bus: command.bus
                 handles: App\Application\ConfirmCheckout\ConfirmCheckoutCommand
+
+    App\Application\ConfirmPayment\ConfirmPaymentHandler:
+        tags:
+            -   name: messenger.message_handler
+                bus: command.bus
+                handles: App\Application\ConfirmPayment\ConfirmPaymentCommand

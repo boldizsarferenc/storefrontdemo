@@ -16,7 +16,7 @@ class PaymentMethodRepository extends ServiceEntityRepository implements Payment
         parent::__construct($registry, PaymentMethod::class);
     }
 
-    public function getPaymentMethod(PaymentMethodId $id): PaymentMethod
+    public function getPaymentMethod(string $id): PaymentMethod
     {
         return $this->find($id);
     }

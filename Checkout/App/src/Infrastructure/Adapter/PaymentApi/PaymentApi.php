@@ -34,13 +34,14 @@ class PaymentApi implements PaymentApiInterface
         );
     }
 
-    public function createPaymentMethod(string $externalPaymentMethodId, Customer $customer, float $cartTotal): PaymentStatus
+    public function createPaymentMethod(string $checkoutId, string $externalPaymentMethodId, Customer $customer, float $cartTotal): PaymentStatus
     {
         $response = $this->client->request('POST', '/payment/api/payment/initiate', [
                 'headers' => [
                 'Content-Type' => 'application/json'
             ],
             'json' => [
+                'checkoutId' => $checkoutId,
                 'paymentMethodId' => $externalPaymentMethodId,
                 'customer' => [
                     'customerId' => $customer->getCustomerId()->getValue(),
@@ -54,6 +55,27 @@ class PaymentApi implements PaymentApiInterface
         ]);
         $data = json_decode($response->getContent(), true);
 
-        return new PaymentStatus($data['status'] ?? 'error');
+        return new PaymentStatus($data['status'] ?? 'error', $data['redirectUrl'] ?? null);
+    }
+
+    public function getPaymentStatus(string $checkoutId): PaymentStatus
+    {
+        $response = $this->client->request('GET', "/payment/api/getPayment/$checkoutId");
+        $data = json_decode($response->getContent(), true);
+        return new PaymentStatus($data['status'], '');
+    }
+
+    public function refund(string $checkoutId): bool
+    {
+        $response = $this->client->request('POST', '/payment/api/refundPayment', [
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'checkoutId' => $checkoutId,
+            ]
+        ]);
+
+        return $response->getContent() === 'A refund sikeres';
     }
 }

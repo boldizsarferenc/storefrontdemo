@@ -2,28 +2,27 @@
 
 namespace App\Application\ConfirmCheckout;
 
-use App\Domain\Api\OrderApiInterface;
-use App\Domain\Api\PaymentApiInterface;
-use App\Domain\Checkout;
+use App\Application\CheckoutOrchestrator\CheckoutSagaOrchestrator;
+use App\Application\Exception\ApplicationException;
 use App\Domain\CheckoutRepositoryInterface;
 use App\Domain\CheckoutStatus;
+use App\Domain\Saga\SagaLoggerInterface;
 use App\Domain\Shared\EntityId;
-use App\Application\Exception\ApplicationException;
+use Exception;
 
 class ConfirmCheckoutHandler
 {
     public function __construct(
         private readonly CheckoutRepositoryInterface $checkoutRepository,
-        private readonly PaymentApiInterface $paymentApi,
-        private readonly OrderApiInterface $orderApi,
-    ) {}
+        private readonly CheckoutSagaOrchestrator $orchestrator,
+        private readonly SagaLoggerInterface $sagaLogger
+    ) {
+    }
 
     /**
-     * @param ConfirmCheckoutCommand $command
-     * @return Checkout
      * @throws ApplicationException
      */
-    public function __invoke(ConfirmCheckoutCommand $command): Checkout
+    public function __invoke(ConfirmCheckoutCommand $command): ?string
     {
         $checkout = $this->checkoutRepository->findCheckout(new EntityId($command->checkoutId));
 
@@ -31,21 +30,17 @@ class ConfirmCheckoutHandler
             throw new ApplicationException('checkout not found');
         }
 
-        $paymentStatus = $this->paymentApi->createPaymentMethod($command->checkoutId, $checkout->getCustomer(), $checkout->getCart()->getCartTotal());
-
-        if (strtoupper($paymentStatus->getPaymentStatus()) !== 'SUCCESS') {
-            throw new ApplicationException(sprintf(
-                'payment status is not SUCCESS. Current status is: %s',
-                strtoupper($paymentStatus->getPaymentStatus())
-            ));
+        try {
+            $redirectUrl = $this->orchestrator->execute($checkout);
+        } catch (Exception $exception) {
+            $errorMessage = sprintf('An error occurred while processing the order. Reason: %s', $exception->getMessage());
+            $this->sagaLogger->debug(sprintf('[ConfirmCheckoutHandler] %s', $errorMessage));
+            $this->orchestrator->compensate($checkout);
+            $checkout->setCheckoutStatus(CheckoutStatus::STATUS_FAILED);
+            $this->checkoutRepository->updateCheckout($checkout);
+            throw new ApplicationException($errorMessage, $exception->getCode(), $exception);
         }
 
-        $checkout->setCheckoutStatus(CheckoutStatus::Completed);
-        $this->checkoutRepository->updateCheckout($checkout);
-
-        $this->orderApi->createOrder($command->checkoutId);
-
-
-        return $checkout;
+        return $redirectUrl;
     }
 }

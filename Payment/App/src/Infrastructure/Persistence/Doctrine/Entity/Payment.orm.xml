@@ -4,6 +4,7 @@
             <generator strategy="NONE" />
         </id>
         <field name="paymentMethodId" type="PaymentMethodId" column="payment_method_id" />
+        <field name="checkoutId" type="string"/>
         <field name="customer" type="array" />
         <field name="amount" type="decimal"/>
         <field name="status"  type="string" />

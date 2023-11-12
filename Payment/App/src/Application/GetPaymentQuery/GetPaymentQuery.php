@@ -4,13 +4,13 @@ namespace App\Application\GetPaymentQuery;
 
 class GetPaymentQuery
 {
-    private string $paymentId;
+    private string $checkoutId;
 
-    public function __construct(string $paymentId) {
-        $this->paymentId = $paymentId;
+    public function __construct(string $checkoutId) {
+        $this->checkoutId = $checkoutId;
     }
 
-    public function getPaymentId(): string {
-        return $this->paymentId;
+    public function getCheckoutId(): string {
+        return $this->checkoutId;
     }
 }

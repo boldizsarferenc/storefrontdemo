@@ -1,5 +1,3 @@
-const products = require('../controllers/product.controller')
-
 module.exports = app => {
   const products = require("../controllers/product.controller");
 
@@ -10,6 +8,10 @@ module.exports = app => {
   router.get("/", products.findAll);
 
   router.get("/:id", products.findOne);
+
+  router.post("/subtract_stock/:id", products.subtractStock);
+
+  router.post("/add_stock/:id", products.addStock);
 
   router.get("/by_sku/:sku", products.getBySku);
 

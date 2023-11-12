@@ -7,6 +7,6 @@ use App\Domain\PaymentMethod;
 
 interface PaymentMethodRepositoryInterface
 {
-    public function getPaymentMethod(PaymentMethodId $id): PaymentMethod;
+    public function getPaymentMethod(string $id): PaymentMethod;
 
 }

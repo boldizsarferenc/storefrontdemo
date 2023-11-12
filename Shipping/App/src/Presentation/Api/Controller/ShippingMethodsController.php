@@ -6,6 +6,7 @@ use App\Application\CreateShippingMethod\CreateShippingMethodCommand;
 use App\Application\DeleteShippingMethod\DeleteShippingMethodCommand;
 use App\Application\FetchShippingMethods\FetchShippingMethodsQuery;
 use App\Application\GetShippingMethodById\GetShippingMethodByIdQuery;
+use App\Application\IsValidShippingAddress\IsValidShippingAddressQuery;
 use App\Domain\ShippingMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -70,6 +71,22 @@ class ShippingMethodsController extends AbstractController
         );
 
         return new JsonResponse(['id' => $created->getId()], 201);
+    }
+
+    public function isValidShippingAddress(Request $request): JsonResponse
+    {
+        $requestBody = json_decode($request->getContent(), true);
+
+        $isValid = $this->handle(
+            new IsValidShippingAddressQuery(
+                $requestBody["address"],
+                $requestBody["country"],
+                $requestBody["postcode"],
+                $requestBody["city"]
+            )
+        );
+
+        return new JsonResponse(['isValid' => $isValid], 200);
     }
 
     public function deleteShippingMethod(string $shippingMethodId): JsonResponse

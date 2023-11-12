@@ -52,3 +52,9 @@ services:
         - name: messenger.message_handler
           bus: command.bus
           handles: App\Application\DeleteShippingMethod\DeleteShippingMethodCommand
+
+    App\Application\IsValidShippingAddress\IsValidShippingAddressHandler:
+      tags:
+        - name: messenger.message_handler
+          bus: command.bus
+          handles: App\Application\IsValidShippingAddress\IsValidShippingAddressQuery

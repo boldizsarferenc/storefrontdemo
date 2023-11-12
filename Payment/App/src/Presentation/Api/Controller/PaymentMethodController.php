@@ -4,8 +4,10 @@ namespace App\Presentation\Api\Controller;
 
 use App\Application\GetPaymentMethod\GetPaymentMethodHandler;
 use App\Application\GetPaymentMethod\GetPaymentMethodQuery;
+use App\Application\GetPaymentQuery\GetPaymentQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class PaymentMethodController extends AbstractController
 {
@@ -21,5 +23,4 @@ class PaymentMethodController extends AbstractController
             'isEnabled' => $paymentMethod->isEnabled()
         ]);
     }
-
 }

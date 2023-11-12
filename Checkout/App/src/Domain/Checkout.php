@@ -3,13 +3,6 @@
 namespace App\Domain;
 
 use App\Domain\Shared\EntityId;
-use App\Domain\CheckoutStatus;
-use App\Domain\Customer;
-use App\Domain\ShippingAddress;
-use App\Domain\BillingAddress;
-use App\Domain\ShippingMethod;
-use App\Domain\PaymentMethod;
-use App\Domain\Cart;
 
 class Checkout
 {
@@ -21,7 +14,8 @@ class Checkout
         private ?ShippingAddress $shippingAddress = null,
         private ?BillingAddress $billingAddress = null,
         private ?ShippingMethod $shippingMethod = null,
-        private ?PaymentMethod $paymentMethod = null
+        private ?PaymentMethod $paymentMethod = null,
+        private ?string $gatewayUrl = null
     ) {
     }
 
@@ -149,5 +143,15 @@ class Checkout
     public function setPaymentMethod(?\App\Domain\PaymentMethod $paymentMethod): void
     {
         $this->paymentMethod = $paymentMethod;
+    }
+
+    public function setGatewayUrl(?string $getGatewayUrl)
+    {
+        $this->gatewayUrl = $getGatewayUrl;
+    }
+
+    public function getGatewayUrl(): ?string
+    {
+        return $this->gatewayUrl;
     }
 }

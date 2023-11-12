@@ -20,12 +20,13 @@ class GetPaymentHandler
     public function execute(GetPaymentQuery $query): PaymentDTO
     {
         $payment = $this->paymentRepository->get(
-            new PaymentId($query->getPaymentId())
+            new PaymentId($query->getCheckoutId())
         );
 
         $dto = new PaymentDTO();
         $dto->id = $payment->getPaymentId()->getId();
         $dto->paymentMethodId = $payment->getPaymentMethodId()->getId();
+        $dto->checkoutId = $payment->getCheckoutId();
         $dto->customer = $payment->getCustomer();
         $dto->amount = $payment->getAmount();
         $dto->status = $payment->getStatus();

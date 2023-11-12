@@ -16,14 +16,14 @@ class ConfirmCheckoutHandler
         $this->checkoutRepository = $checkoutRepositoryInterface;
     }
 
-    public function __invoke(ConfirmCheckoutCommand $command): ConfirmCheckoutOutput
+    public function __invoke(ConfirmCheckoutCommand $command): array
     {
         try {
-            $checkout = $this->checkoutRepository->confirmCheckout($command->getCheckoutId());
+            return $this->checkoutRepository->confirmCheckout($command->getCheckoutId());
         } catch (DomainException $e) {
             throw new ApplicationException($e->getMessage());
         }
 
-        return new ConfirmCheckoutOutput($checkout);
+        return [];
     }
 }

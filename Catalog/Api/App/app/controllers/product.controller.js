@@ -1,6 +1,5 @@
 const db = require("../models");
 const products = db.products;
-const Op = db.Sequelize.Op;
 
 exports.getBySku = (req, res) => {
   if (!req.params.sku) {
@@ -143,3 +142,68 @@ exports.delete = (req, res) => {
       });
     });
 };
+
+exports.subtractStock = async (req, res) => {
+  const id = req.params.id;
+  const quantity = Number(req.query.quantity);
+  if(!quantity) {
+    res.status(400).send({
+      message: `Missing or invalid quantity parameter!`
+    });
+
+    return
+  }
+
+  try {
+    const foundProduct = await products.findByPk(id)
+
+    const newStock = foundProduct.stock - quantity
+    if (newStock < 0) {
+      res.status(409).send({
+        message: `Stock not enough!`
+      });
+
+      return
+    }
+
+    await foundProduct.update({stock: newStock})
+    await foundProduct.save()
+
+    res.status(200).send({
+      foundProduct
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: `Cannot update product with id=${id}!`
+    });
+  }
+}
+
+exports.addStock = async (req, res) => {
+  const id = req.params.id;
+  const quantity = Number(req.query.quantity);
+  if(!quantity) {
+    res.status(400).send({
+      message: `Missing or invalid quantity parameter!`
+    });
+
+    return
+  }
+
+  try {
+    const foundProduct = await products.findByPk(id)
+
+    const newStock = Number(foundProduct.stock) + quantity
+
+    await foundProduct.update({stock: newStock})
+    await foundProduct.save()
+
+    res.status(200).send({
+      foundProduct
+    });
+  } catch (err) {
+    res.send(500).send({
+      message: `Cannot update product with id=${id}!`
+    });
+  }
+}

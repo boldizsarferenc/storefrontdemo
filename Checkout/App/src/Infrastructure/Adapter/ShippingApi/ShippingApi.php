@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Adapter\ShippingApi;
 
 use App\Domain\Api\ShippingApiInterface;
+use App\Domain\Checkout;
 use App\Domain\Shared\EntityIdGeneratorInterface;
 use App\Domain\ShippingMethod;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -30,5 +31,21 @@ class ShippingApi implements ShippingApiInterface
             $data['name'],
             $data['shippingLanes'][0]['cost']
         );
+    }
+
+    public function isValidAddress(Checkout $checkout): bool
+    {
+        $address = $checkout->getShippingAddress();
+        $response = $this->client->request('POST', "is-valid-address", [
+            'json' => [
+                'address' => $address->getAddress(),
+                'country' => $address->getCountry(),
+                'postcode' => $address->getPostcode(),
+                'city' => $address->getCity()
+            ]
+        ]);
+        $data = json_decode($response->getContent(), true);
+
+        return $data['isValid'];
     }
 }

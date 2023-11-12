@@ -4,7 +4,6 @@ namespace App\Application\SavePaymentMethod;
 
 
 use App\Application\Exception\ApplicationException;
-use App\Application\SavePaymentMethod\SavePaymentMethodCommand;
 use App\Domain\Api\PaymentApiInterface;
 use App\Domain\Checkout;
 use App\Domain\CheckoutRepositoryInterface;
